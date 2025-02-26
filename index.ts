@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import mongoose, { FilterQuery } from "mongoose";
+import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import { Task } from "./models/task";
@@ -13,24 +13,21 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(
   cors({
-    origin: ["*"],
+    origin: "http://localhost:3000", // Allow requests from frontend
+    // origin: "*", // Allow requests from frontend
+    methods: "GET,POST,PUT,DELETE", // Allowed HTTP methods
+    allowedHeaders: "Content-Type,Authorization", // Allowed headers
   })
 );
 
 // MongoDB Connection
 mongoose
-  .connect(
-    process.env.MONGO_URI as string,
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    } as mongoose.ConnectOptions
-  )
+  .connect(process.env.MONGO_URI as string)
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.error("MongoDB Connection Error:", err));
 
 // Routes
-app.get("/api/tasks", async (req, res) => {
+app.get("/api/tasks", async (req: Request, res: Response) => {
   try {
     const tasks = await Task.find();
     res.json(tasks);
@@ -39,10 +36,18 @@ app.get("/api/tasks", async (req, res) => {
   }
 });
 
-app.post("/api/tasks", async (req, res) => {
+app.post("/api/tasks", async (req: Request, res: Response) => {
   try {
-    const { content } = req.body;
-    const newTask = new Task({ content });
+    const { title, description, dueDate, assignee, priority, status } =
+      req.body;
+    const newTask = new Task({
+      title,
+      description,
+      dueDate,
+      assignee,
+      priority,
+      status,
+    });
     await newTask.save();
     res.status(201).json(newTask);
   } catch (err) {
@@ -53,18 +58,16 @@ app.post("/api/tasks", async (req, res) => {
 app.put("/api/tasks/:id", async (req: Request<{ id: string }>, res: any) => {
   try {
     const { id } = req.params;
-    const { content } = req.body;
-
-    if (!content) return res.status(400).json({ error: "Content is required" });
+    const { title, description, dueDate, assignee, priority, status } =
+      req.body;
 
     const updatedTask = await Task.findByIdAndUpdate(
       id,
-      { content },
+      { title, description, dueDate, assignee, priority, status },
       { new: true }
     ).exec();
 
     if (!updatedTask) return res.status(404).json({ error: "Task not found" });
-
     res.status(200).json(updatedTask);
   } catch (err) {
     res.status(500).json({ error: "Failed to update task" });
@@ -77,7 +80,6 @@ app.delete("/api/tasks/:id", async (req: Request<{ id: string }>, res: any) => {
     const deletedTask = await Task.findByIdAndDelete(id).exec();
 
     if (!deletedTask) return res.status(404).json({ error: "Task not found" });
-
     res.json({ message: "Task deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: "Failed to delete task" });
