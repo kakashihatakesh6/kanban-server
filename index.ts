@@ -27,6 +27,14 @@ mongoose
   .catch((err) => console.error("MongoDB Connection Error:", err));
 
 // Routes
+
+app.get("/", async (req, res) => {
+  try {
+    res.status(200).json({success: true, message: "Kanban Server is running fine!"});
+  } catch (error) {
+    res.status(500).json({success: false, message: "Internal Server Error"});
+  }
+});
 app.get("/api/tasks", async (req: Request, res: Response) => {
   try {
     const tasks = await Task.find();
