@@ -40,7 +40,8 @@ mongoose
 app.get("/", async (req, res) => {
   try {
     res
-      .send("Welcome to the Kanban Server!");
+      .status(200)
+      .json({ success: true, message: "Welcome to the Kanban Server!" });
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
