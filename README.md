@@ -1,65 +1,73 @@
-```md
-# Kanban Board API
+# Kanban Board Server
 
-A **Kanban Board API** built with **Express.js** and **MongoDB**, providing a backend for managing tasks.
+## Overview
+This is a **Kanban Board API server** built with **Node.js, Express, and MongoDB**. It allows users to **create, read, update, and delete (CRUD)** tasks for a Kanban board.
 
 ## Features
-- RESTful API for managing Kanban tasks.
-- MongoDB as a database with Mongoose ODM.
-- CORS configuration for secure frontend communication.
-- Middleware for logging route hits.
-- Deployed on **Vercel** with environment-specific configurations.
+- 🛠️ **RESTful API** for managing tasks
+- 📦 **MongoDB Database** integration
+- 🔐 **Environment variables support** using `dotenv`
+- 🚀 **CORS-enabled** for frontend integration
+- 📜 **Middleware for logging API calls**
+- 🏗️ **Deployed on Vercel** (compatible with serverless environments)
 
 ## Tech Stack
-- **Node.js** with **Express.js**
-- **MongoDB** with **Mongoose**
-- **TypeScript**
-- **CORS** for handling cross-origin requests
-- **dotenv** for environment variables
+- **Node.js** & **Express** for backend
+- **MongoDB** with **Mongoose** for data storage
+- **CORS** for secure API access
+- **Dotenv** for environment variable management
+- **Vercel** for deployment
 
-## Installation
+---
 
-Clone the repository and install dependencies:
+## Installation & Setup
 
+### 1️⃣ Clone the Repository
 ```sh
-git clone https://github.com/your-repo/kanban-server.git
+git clone https://github.com/yourusername/kanban-server.git
 cd kanban-server
+```
+
+### 2️⃣ Install Dependencies
+```sh
 npm install
 ```
 
-## Environment Variables
-Create a `.env` file in the root directory with the following variables:
-
+### 3️⃣ Create a `.env` File
+Create a `.env` file in the root directory and add:
 ```env
 PORT=5000
-MONGO_URI=your_mongodb_connection_string
-HOST=http://localhost:3000
-NODE_ENV=development
+MONGO_URI=your-mongodb-connection-string
+HOST=http://localhost:3000  # Update this with your frontend URL
 ```
 
-## Running the Server
-
-Start the development server:
-
+### 4️⃣ Run the Server
+#### Development Mode
 ```sh
 npm run dev
 ```
-
-Start the production server:
-
+#### Production Mode
 ```sh
 npm start
 ```
 
+---
+
 ## API Endpoints
 
-### Base URL
-- **Local**: `http://localhost:5000`
-- **Production**: `https://your-vercel-url.vercel.app`
+### 🌟 Root Endpoint
+```http
+GET /
+```
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Welcome to the Kanban Server!"
+}
+```
 
-### Routes
-
-#### 1. Get all tasks
+### 📌 Get All Tasks
 ```http
 GET /api/tasks
 ```
@@ -78,29 +86,41 @@ GET /api/tasks
 ]
 ```
 
-#### 2. Create a task
+### 🆕 Create a Task
 ```http
 POST /api/tasks
 ```
 **Request Body:**
 ```json
 {
-  "title": "Design UI",
-  "description": "Create UI mockups",
-  "dueDate": "2023-07-20",
+  "title": "New Task",
+  "description": "Task description",
+  "dueDate": "2023-08-01",
+  "assignee": "John Doe",
+  "priority": "Medium",
+  "status": "In Progress"
+}
+```
+**Response:**
+```json
+{
+  "_id": "task-123",
+  "title": "New Task",
+  "description": "Task description",
+  "dueDate": "2023-08-01",
   "assignee": "John Doe",
   "priority": "Medium",
   "status": "In Progress"
 }
 ```
 
-#### 3. Update a task
+### ✏️ Update a Task
 ```http
 PUT /api/tasks/:id
 ```
-**Request Body:** *(same as POST request)*
+**Request Body:** _(Same as Create Task)_
 
-#### 4. Delete a task
+### 🗑️ Delete a Task
 ```http
 DELETE /api/tasks/:id
 ```
@@ -111,30 +131,21 @@ DELETE /api/tasks/:id
 }
 ```
 
-## Deployment on Vercel
+---
 
-To deploy on **Vercel**, follow these steps:
+## Deployment
+### 🚀 Deploy on Vercel
+1. Install Vercel CLI: `npm install -g vercel`
+2. Run `vercel` and follow the prompts
+3. Your server will be live at `https://your-kanban-server.vercel.app`
 
-1. Install Vercel CLI:
-   ```sh
-   npm i -g vercel
-   ```
-2. Run:
-   ```sh
-   vercel
-   ```
-3. Follow the CLI instructions to deploy.
-
-## Logging
-The API logs every request with a timestamp:
-```sh
-[2025-03-03T12:00:00.000Z] ✅ Route hit: GET /api/tasks
-```
-
-## Contributing
-Feel free to open issues or submit pull requests.
+---
 
 ## License
-MIT License.
-```
+📜 MIT License
+
+## Author
+👤 **Your Name**
+- GitHub: [@kakashihatakesh6](https://github.com/kakashihatakesh6)
+- LinkedIn: [Nikhil Dasar](https://www.linkedin.com/in/nikhildasar/)
 
