@@ -20,6 +20,16 @@ app.use(
   })
 );
 
+// Middleware to log route hits
+app.use((req, res, next) => {
+  console.log(
+    `[${new Date().toISOString()}] ✅ Route hit: ${req.method} ${
+      req.originalUrl
+    }`
+  );
+  next();
+});
+
 // MongoDB Connection
 mongoose
   .connect(process.env.MONGO_URI as string)
@@ -27,14 +37,15 @@ mongoose
   .catch((err) => console.error("MongoDB Connection Error:", err));
 
 // Routes
-
 app.get("/", async (req, res) => {
   try {
-    res.status(200).json({success: true, message: "Kanban Server is running fine!"});
+    res
+      .send("Welcome to the Kanban Server!");
   } catch (error) {
-    res.status(500).json({success: false, message: "Internal Server Error"});
+    res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 });
+
 app.get("/api/tasks", async (req: Request, res: Response) => {
   try {
     const tasks = await Task.find();
@@ -94,7 +105,7 @@ app.delete("/api/tasks/:id", async (req: Request<{ id: string }>, res: any) => {
   }
 });
 
-// Vercel compatibility
+// Vercel compatibilityv
 export default app;
 
 if (process.env.NODE_ENV !== "production") {
